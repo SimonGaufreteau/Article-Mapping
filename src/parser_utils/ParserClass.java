@@ -3,6 +3,7 @@ package parser_utils;
 // A class parsing an article and generating the number of occurences of a word in a text
 
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -35,6 +36,23 @@ public class ParserClass {
         return hashMap;
     }
 
+    /*
+    * Same method but getting a filepath instead. (path for project root)
+    *
+     */
+    public static Map<String,Integer> getOccurencesFromFile(String filepath,int n,String regex) throws IOException {
+        File file = new File(filepath);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        StringBuilder s = new StringBuilder();
+        String line = br.readLine();
+        while(line!=null){
+            s.append(line);
+            line = br.readLine();
+        }
+
+        return getOccurences(s.toString(),n,regex);
+    }
 
     public static Map<String, Integer> sortByValue(final Map<String, Integer> wordCounts) {
         return wordCounts.entrySet()
@@ -43,7 +61,11 @@ public class ParserClass {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
-    public static String getBestOccurences(Map<String,Integer> map,int k){
+    /*
+    * Returns a ready-to-print String of the k-top values of the article given in a file (input : filePath).
+    *
+     */
+    private static String getBestOccurences(Map<String,Integer> map,int k){
         int i=0;
         StringBuilder s = new StringBuilder();
         s.append(String.format("Best %d words :\n",k));
@@ -58,8 +80,7 @@ public class ParserClass {
         return s.toString();
     }
 
-    public static String getBestOccurences(String article,int n,String regex,int k){
-        return getBestOccurences(getOccurences(article,n,regex),k);
+    public static String getBestOccurencesFromFile(String filepath,int n,String regex,int k) throws IOException {
+        return String.format("Article given : %s\n%s",filepath,getBestOccurences(getOccurencesFromFile(filepath, n, regex),k));
     }
-
 }

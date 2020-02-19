@@ -1,5 +1,6 @@
 import parser_utils.ParserClass;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -7,42 +8,12 @@ import java.util.stream.Collectors;
 public class Main {
 
 
-    public static void main(String[] args) {
-        String article = "This a an article splitted around spaces/dots and maybe the following characters :\n a,b. You should maybe think about splitting over some more advanced splitted solutions. Dots and spaces are not best to try some things like this one.";
-        String insee = "Le taux de chômage en France s’établit à 8,1 % de la population active, 0,7 point sous son niveau d’il y a un an\n" +
-                "Au quatrième trimestre 2019, le nombre de chômeurs diminue de 85 000 sur le trimestre, à 2,4 millions de personnes. Le taux de chômage au sens du BIT est ainsi en nette baisse : après +0,1 point le trimestre précédent, il passe de 8,5 % à 8,1 % de la population active en France (hors Mayotte). Il est inférieur de 0,7 point à son niveau du quatrième trimestre 2018 et à son plus bas niveau depuis fin 2008. En France métropolitaine, il s'établit à 7,9 %.\n" +
-                "\n" +
-                "Le taux de chômage diminue nettement pour les personnes de 25 à 49 ans (–0,5 point) et celles de 50 ans ou plus (–0,5 point). Parmi les seniors, il baisse plus fortement pour les femmes (–0,7 point) que pour les hommes (–0,3 point). Le taux de chômage augmente néanmoins pour les jeunes (+0,7 point), en particulier les jeunes femmes (+1,1 point).\n" +
-                "\n" +
-                "Sur un an, la baisse du taux de chômage est plus marquée pour les femmes (–0,8 point) que pour les hommes (–0,4 point).\n" +
-                "\n" +
-                "Le chômage de longue durée baisse de 0,2 point sur le trimestre\n" +
-                "Parmi les chômeurs, 1,0 million déclarent rechercher un emploi depuis au moins un an. Le taux de chômage de longue durée s'établit à 3,2 % de la population active au quatrième trimestre 2019, en baisse de 0,2 point par rapport au trimestre précédent et de 0,4 point sur un an.\n" +
-                "\n" +
-                "Le halo autour du chômage augmente de nouveau au quatrième trimestre\n" +
-                "Parmi les personnes inactives au sens du BIT, 1,7 million souhaitent un emploi sans être considérées au chômage : elles constituent le halo autour du chômage. Leur nombre augmente de 59 000 entre les troisième et quatrième trimestres 2019. La part du halo dans la population des 15-64 ans augmente ainsi de 0,1 point sur le trimestre (+ 0,2 point sur un an), à 4,0 %, son plus haut niveau depuis 2003.\n" +
-                "\n" +
-                "Le taux d’emploi rebondit au quatrième trimestre 2019\n" +
-                "Au quatrième trimestre 2019, le taux d’emploi des 15-64 ans augmente de 0,7 point après avoir reculé le trimestre précédent (–0,3 point) ; il atteint 65,9 %, en progression de 0,4 point sur un an. Il est quasi stable pour les 15-24 ans (+0,1 point), alors qu'il est en nette hausse pour les seniors (+1,1 point) et les personnes d'âge intermédiaire (+0,8 point).\n" +
-                "\n" +
-                "Sur un an, le taux d'emploi des jeunes baisse de 0,8 point alors qu'il augmente pour les 25-49 ans (+0,7 point) et les 50-64 ans (+1,0 point). Parmi ces derniers, le taux d'emploi des 55-64 ans augmente encore plus fortement (+1,2 point).\n" +
-                "\n" +
-                "Le taux d’emploi en contrat à durée indéterminée (CDI) des 15-64 ans atteint 49,3 % au quatrième trimestre 2019. Stable sur un an, il augmente de 0,2 point sur le trimestre. Le taux d’emploi en contrat à durée déterminée (CDD) ou en intérim est également en hausse de 0,2 point par rapport au trimestre précédent et retrouve son niveau de fin 2018. À 7,7 %, il se situe 0,4 point au-dessous de son plus haut niveau, atteint fin 2017.\n" +
-                "Les taux d’emploi à temps complet et à temps partiel progressent tous les deux\n" +
-                "Le taux d’emploi à temps complet s’établit à 54,3 % au quatrième trimestre 2019. Il augmente de 0,4 point sur le trimestre et sur un an. Le taux d’emploi à temps partiel progresse de 0,3 point, à 11,6 %, et retrouve son niveau atteint un an auparavant.\n" +
-                "\n" +
-                "Le sous-emploi est quasi stable ce trimestre\n" +
-                "Au quatrième trimestre 2019, 5,3 % des personnes en emploi sont en situation de sous-emploi. Il s’agit principalement de personnes à temps partiel souhaitant travailler davantage. Cette part est quasi stable sur le trimestre (–0,1 point), mais se réduit nettement sur un an (–0,5 point).\n" +
-                "\n" +
-                "Le taux d’activité augmente à nouveau au quatrième trimestre 2019\n" +
-                "Après une légère baisse le trimestre précédent (–0,2 point) le taux d’activité des 15-64 ans augmente de 0,4 point sur le quatrième trimestre 2019, à 71,8 %. Il est quasi stable sur un an (–0,1 point). Par rapport au troisième trimestre 2019, il rebondit pour les jeunes (+0,5 point), les personnes d'âge intermédiaire (+0,4 point) et les 50-64 ans (+0,7 point). Parmi ces derniers, la hausse du taux d'activité des 55-64 ans est particulièrement prononcée sur le trimestre (+0,9 point) et sur un an (+1,0 point).\n" +
-                "\n" +
-                "Révisions\n" +
-                "Par rapport à la première estimation publiée le 14 novembre 2019, le taux de chômage du troisième trimestre 2019 est abaissé de 0,1 point, à 8,5 %, principalement en raison de l'actualisation des coefficients de correction des variations saisonnières. Sur les trimestres précédents, les révisions ponctuelles du taux de chômage, limitées à +/– 0,1 point, sont principalement imputables à la révision apportée aux pondérations depuis 2015 (calage sur de nouvelles marges de population).";
+    public static void main(String[] args) throws IOException {
         String regex = "[\\Q ,\n.:/-+()%$^'\"&!?;\\E]";
         //Pattern p =  Pattern.compile(regex);
         int n=3;
-        String result = ParserClass.getBestOccurences(insee,n,regex,6);
+        int k=8;
+        String result = ParserClass.getBestOccurencesFromFile("Articles/insee-chomage.txt",n,regex,k);
         System.out.println(result);
     }
 }
