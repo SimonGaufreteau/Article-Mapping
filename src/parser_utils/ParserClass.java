@@ -102,10 +102,17 @@ public class ParserClass {
                 for(int i=0;i<words.length-1;i++){
                     if(words[i].length()<=n) continue;
                     for (int j=i+1;j<words.length;j++){
+                        //Checking if the pair is not a duplicate
                         if (words[j].length()<=n || words[i].equals(words[j])) continue;
+
+                        //Checking if the pair is not already existing and in reversed form
                         Pair<String,String> pair = new Pair<>(words[i], words[j]);
+                        Pair<String,String> reversedpair = new Pair<>(words[j], words[i]);
                         if(map.containsKey(pair)){
                             map.put(pair,map.get(pair)+1);
+                        }
+                        else if(map.containsKey(reversedpair)){
+                            map.put(reversedpair,map.get(reversedpair)+1);
                         }
                         else {
                             map.put(pair,1);

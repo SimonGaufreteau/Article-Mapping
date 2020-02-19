@@ -10,7 +10,7 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        String regex = "[\\Q ,\n.:/-+()%$^'\"&!?;\\E]";
+        String regex = "[\\Q ,\n.:/-+()%$^'’\"&!?;\\E]";
         //Pattern p =  Pattern.compile(regex);
         int n=3;
         int k=10;
