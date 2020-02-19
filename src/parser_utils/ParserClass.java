@@ -3,6 +3,8 @@ package parser_utils;
 // A class parsing an article and generating the number of occurences of a word in a text
 
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -54,12 +56,7 @@ public class ParserClass {
         return getOccurences(s.toString(),n,regex);
     }
 
-    public static Map<String, Integer> sortByValue(final Map<String, Integer> wordCounts) {
-        return wordCounts.entrySet()
-                .stream()
-                .sorted((Map.Entry.<String, Integer>comparingByValue()).reversed())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-    }
+
 
     /*
     * Returns a ready-to-print String of the k-top values of the article given in a file (input : filePath).
@@ -67,10 +64,11 @@ public class ParserClass {
      */
     private static String getBestOccurences(Map<String,Integer> map,int k){
         int i=0;
+        SortingMap <String,Integer>sorting = new SortingMap<>();
         StringBuilder s = new StringBuilder();
         k=Math.min(map.size(),k);
         s.append(String.format("Best %d words :\n",k));
-        Map<String, Integer> sortedmap = ParserClass.sortByValue(map);
+        Map<String, Integer> sortedmap = sorting.sortByValue(map);
         for (String key:sortedmap.keySet()) {
             if(i>=k)break;
             i++;
@@ -83,4 +81,63 @@ public class ParserClass {
     public static String getBestOccurencesFromFile(String filepath,int n,String regex,int k) throws IOException {
         return String.format("Article given : %s\n%s",filepath,getBestOccurences(getOccurencesFromFile(filepath, n, regex),k));
     }
+
+
+    /*
+    * Finds the most used pairs of words in every sentence of a file.
+     */
+    @NotNull
+    public static Map<Pair<String,String>,Integer> getConcurrentPairs(String filepath, int n, String regex) throws IOException {
+        File f = new File(filepath);
+        BufferedReader br = new BufferedReader(new FileReader(f));
+
+        String line = br.readLine();
+
+        Map<Pair<String,String>,Integer> map = new HashMap<>();
+        while (line!=null){
+            String[] sentenceSplit = line.split("[.]");
+            for(String sentence : sentenceSplit){
+                //For each sentence, iterate over all pairs of words and put them into the map or update it (if the pair was already found)
+                String[] words = sentence.split(regex);
+                for(int i=0;i<words.length-1;i++){
+                    if(words[i].length()<=n) continue;
+                    for (int j=i+1;j<words.length;j++){
+                        if (words[j].length()<=n || words[i].equals(words[j])) continue;
+                        Pair<String,String> pair = new Pair<>(words[i], words[j]);
+                        if(map.containsKey(pair)){
+                            map.put(pair,map.get(pair)+1);
+                        }
+                        else {
+                            map.put(pair,1);
+                        }
+                    }
+                }
+            }
+            line=br.readLine();
+        }
+        return map;
+    }
+
+
+    //TODO : Generic method
+    private static String getBestConcurrentPairs(Map<Pair<String,String>,Integer> map,String regex, int k){
+        StringBuilder s = new StringBuilder("Best pairs :\n");
+
+        SortingMap<Pair<String,String>,Integer> sorting = new SortingMap<>();
+        Map<Pair<String, String>, Integer> sortedmap = sorting.sortByValue(map);
+        int i=0;
+        for (Pair<String,String> key:sortedmap.keySet()) {
+            if(i>=k)break;
+            i++;
+            s.append(String.format("The pair : \"%s\",\"%s\" appeared %d times.\n",key.getKey(),key.getValue(),sortedmap.get(key)));
+        }
+        return s.toString();
+    }
+
+    public static String getBestgetConcurrentPairsFromFile(String pathFile, int n, String regex, int k) throws IOException {
+        return getBestConcurrentPairs(getConcurrentPairs(pathFile,n, regex),regex,k);
+
+    }
 }
+
+

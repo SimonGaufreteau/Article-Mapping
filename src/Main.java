@@ -1,3 +1,4 @@
+import parser_utils.Pair;
 import parser_utils.ParserClass;
 
 import java.io.IOException;
@@ -12,9 +13,12 @@ public class Main {
         String regex = "[\\Q ,\n.:/-+()%$^'\"&!?;\\E]";
         //Pattern p =  Pattern.compile(regex);
         int n=3;
-        int k=2000;
+        int k=10;
         String result = ParserClass.getBestOccurencesFromFile("Articles/insee-chomage.txt",n,regex,k);
         System.out.println(result);
+
+        String bestpairs = ParserClass.getBestgetConcurrentPairsFromFile("Articles/insee-chomage.txt",n,regex,k);
+        System.out.println(bestpairs);
     }
 }
 
