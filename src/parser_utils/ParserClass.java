@@ -68,8 +68,8 @@ public class ParserClass {
     private static String getBestOccurences(Map<String,Integer> map,int k){
         int i=0;
         StringBuilder s = new StringBuilder();
+        k=Math.min(map.size(),k);
         s.append(String.format("Best %d words :\n",k));
-
         Map<String, Integer> sortedmap = ParserClass.sortByValue(map);
         for (String key:sortedmap.keySet()) {
             if(i>=k)break;
