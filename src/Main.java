@@ -19,6 +19,15 @@ public class Main {
 
         String bestpairs = ParserClass.getBestgetConcurrentPairsFromFile("Articles/insee-chomage.txt",n,regex,k);
         System.out.println(bestpairs);
+
+        n=3;
+        String psg = ParserClass.getBestOccurencesFromFile("Articles/psg-dortmund.txt",n,regex,k);
+        System.out.println(psg);
+
+
+        String bestpairsPSG = ParserClass.getBestgetConcurrentPairsFromFile("Articles/psg-dortmund.txt",n,regex,k);
+        System.out.println(bestpairsPSG);
+
     }
 }
 
