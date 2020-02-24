@@ -3,12 +3,11 @@ package parser_utils;
 // A class parsing an article and generating the number of occurences of a word in a text
 
 
-import org.jetbrains.annotations.NotNull;
+//import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParserClass {
@@ -62,7 +61,7 @@ public class ParserClass {
     * Returns a ready-to-print String of the k-top values of the article given in a file (input : filePath).
     *
      */
-    private static String getBestOccurences(Map<String,Integer> map,int k){
+    public static String getBestOccurences(Map<String,Integer> map,int k){
         int i=0;
         SortingMap <String,Integer>sorting = new SortingMap<>();
         StringBuilder s = new StringBuilder();
@@ -86,7 +85,7 @@ public class ParserClass {
     /*
     * Finds the most used pairs of words in every sentence of a file.
      */
-    @NotNull
+    //@NotNull
     public static Map<Pair<String,String>,Integer> getConcurrentPairs(String filepath, int n, String regex) throws IOException {
         File f = new File(filepath);
         BufferedReader br = new BufferedReader(new FileReader(f));
@@ -143,7 +142,99 @@ public class ParserClass {
 
     public static String getBestgetConcurrentPairsFromFile(String pathFile, int n, String regex, int k) throws IOException {
         return getBestConcurrentPairs(getConcurrentPairs(pathFile,n, regex),regex,k);
+    }
 
+
+    /*
+    Retourne le thesaurus correspondant au fichier thes_fr.dat dans le repertoire Thes.
+    Format of a line :
+    hanse|1
+    (Nom)|guilde|corporation|association
+
+    Note : 1 est le nombre de lignes suivant le mot. La taille d'une ligne est variable
+    Output : Map<String,ArrayList<String>>
+     */
+    public static Map<String, ArrayList<String>> getThesaurus() throws IOException {
+        Map<String,ArrayList<String>> map = new LinkedHashMap<>();
+        File f = new File("Thes\\thes_fr.dat");
+        BufferedReader br = new BufferedReader(new FileReader(f));
+
+        br.readLine();
+        String line=br.readLine();
+        while (line!=null){
+            String[] splitted = line.split("[|]");
+            try{
+                int nbLines = Integer.parseInt(splitted[1]);
+                //Reading lines nbLines times.
+                String key = splitted[0];
+                ArrayList<String> arrayList = new ArrayList<>();
+                for(int i=0;i<nbLines;i++){
+                    line=br.readLine();
+                    String[] splitLine = line.split("[|]");
+                    for(int j=1;j<splitLine.length;j++){
+                        arrayList.add(splitLine[j]);
+                    }
+                }
+                map.put(key,arrayList);
+            }
+            //catch (NumberFormatException ignored){}
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+            line=br.readLine();
+        }
+        return map;
+    }
+
+    public static Map<String,Integer> getOccurenciesSynonyms(String filepath,String regex,int n) throws IOException {
+        File file = new File(filepath);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        Map<String,ArrayList<String>> thesaurus = getThesaurus();
+        Map<String,Integer> map = new HashMap<>();
+        String line = br.readLine();
+        while(line!=null){
+            String[] splitted = line.split(regex);
+            for(String word:splitted){
+                word =word.toLowerCase();
+                if(word.length()>n) {
+                    //If the word already is in the hashmap, update it
+                    if (map.containsKey(word)) {
+                        map.put(word,map.get(word) + 1);
+                    } else {
+                        boolean isSynonym=false;
+                        for(String key:map.keySet()){
+                            ArrayList<String> ar = thesaurus.get(key);
+                            if(ar!=null && ar.contains(word)){
+                                map.put(key,map.get(key)+1);
+                                isSynonym=true;
+                                break;
+                            }
+                        }
+                        if(!isSynonym){
+                            map.put(word, 1);
+                        }
+                    }
+                }
+            }
+            line = br.readLine();
+        }
+        return map;
+    }
+
+
+    public static int getNumberOfOccurences(Map<String,Integer> map){
+        int sum=0;
+        for(String key:map.keySet())
+            sum+=map.get(key);
+        return sum;
+    }
+
+    public static void displayMap(Map<String,ArrayList<String>> map){
+        for(String key:map.keySet()){
+            System.out.println("Word : "+key);
+            System.out.println(map.get(key));
+        }
     }
 }
 
