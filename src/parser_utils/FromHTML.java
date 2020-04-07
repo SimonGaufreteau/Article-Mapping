@@ -14,7 +14,7 @@ public class FromHTML {
 
 
     public static Elements queryFromHTML(String url,String cssQuery) throws IOException {
-        System.out.println("Waiting to connect to the url...");
+        System.out.println("Waiting to connect to the url... ("+url+")");
         long time = System.currentTimeMillis();
         Connection connect = Jsoup.connect(url);
         System.out.println("Connected to the url in "+(System.currentTimeMillis()-time)+" milliseconds.");
