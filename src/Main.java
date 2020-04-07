@@ -15,12 +15,17 @@ public class Main {
 
         //Examples with a file :
         String filepath = "Articles/insee-chomage.txt";
+
+        System.out.println("--- With the synonyms disabled ---");
         Map<String,Integer> map = ParserClass.getOccurrencesFromFile(filepath,n,regex);
         System.out.println(ParserClass.getBestOccurrences(map,k));
 
-        Map<String,Integer> synonymMap = ParserClass.getOccurrencesSynonymsFromFile(filepath,regex,n);
-        System.out.println(ParserClass.getBestOccurrences(synonymMap,k));
+        /* A method using the file, in general slower than the second method.
 
+        Map<String,Integer> synonymMap = ParserClass.getOccurrencesSynonymsFromFile(filepath,regex,n);
+        System.out.println(ParserClass.getBestOccurrences(synonymMap,k));*/
+
+        System.out.println("--- With the synonyms enabled ---");
         Map<String,Integer> synonymMapV2 = ParserClass.getOccurrencesSynonyms(map);
         System.out.println(ParserClass.getBestOccurrences(synonymMapV2,k));
 
@@ -31,7 +36,7 @@ public class Main {
         String url = "https://en.wikipedia.org/wiki/Clare_Stevenson";
         String cssQuery = "p,h1,h2,h3";
         String document= FromHTML.stringFromHTML(url,cssQuery);
-        map = ParserClass.getOccurrences(document,n,regex);
+        map = ParserClass.getOccurrencesSynonyms(document,n,regex);
         System.out.println(ParserClass.getBestOccurrences(map,k));
 
         pairMap = ParserClass.getConcurrentPairs(document,n,regex);

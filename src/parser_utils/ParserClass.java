@@ -181,7 +181,7 @@ public class ParserClass {
     /**
      * Same as {@link #getOccurrences(String, int, String)} but with synonyms taken in count (with {@link #getThesaurus(String)}).. Another (easier to understand) version is shown in the {@link #getOccurrencesSynonyms(Map)} version.
      */
-    public static Map<String,Integer> getOccurrencesSynonyms(String article, String regex, int n) throws IOException {
+    public static Map<String,Integer> getOccurrencesSynonyms(String article, int n, String regex) throws IOException {
         Map<String,ArrayList<String>> thesaurus = getThesaurus();
         Map<String,Integer> map = new HashMap<>();
         String[] lines = article.split("[\n]");
@@ -215,15 +215,15 @@ public class ParserClass {
     }
 
     /**
-     * Same as {@link #getOccurrencesSynonyms(String, String, int)} but from a file.
+     * Same as {@link #getOccurrencesSynonyms(String,int,String)} but from a file.
      */
-    public static Map<String,Integer> getOccurrencesSynonymsFromFile(String filepath, String regex, int n) throws IOException {
-        return getOccurrencesSynonyms(FileUtils.getFileContent(filepath),regex,n);
+    public static Map<String,Integer> getOccurrencesSynonymsFromFile(String filepath, int n, String regex) throws IOException {
+        return getOccurrencesSynonyms(FileUtils.getFileContent(filepath),n,regex);
     }
 
 
     /**
-     * Another version of the {@link #getOccurrencesSynonyms(String,String,int)}. If you already have the result of the {@link #getOccurrences(String, int, String)} method, you should use this method.
+     * Another version of the {@link #getOccurrencesSynonyms(String,int,String)}. If you already have the result of the {@link #getOccurrences(String, int, String)} method, you should use this method.
      * If you don't, your should probably consider using the method cited above.
      * @param map Result of the {@link #getOccurrences(String, int, String)} method.
      */
