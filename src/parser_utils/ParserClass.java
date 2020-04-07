@@ -42,7 +42,7 @@ public class ParserClass {
     * @see #getOccurrences(String, int, String)
      */
     public static Map<String,Integer> getOccurrencesFromFile(String filepath, int n, String regex) throws IOException {
-        return getOccurrences(FileUtiles.getFileContent(filepath),n,regex);
+        return getOccurrences(FileUtils.getFileContent(filepath),n,regex);
     }
 
 
@@ -71,7 +71,7 @@ public class ParserClass {
     * Finds the most used pairs of words in every sentence of an article.
      */
     public static Map<Pair<String,String>,Integer> getConcurrentPairs(String article, int n, String regex) {
-        String[] sentenceSplit = article.split("[.]");
+        String[] sentenceSplit = article.split("[.?!]");
         Map<Pair<String,String>,Integer> map = new HashMap<>();
         for(String sentence : sentenceSplit){
             //For each sentence, iterate over all pairs of words and put them into the map or update it (if the pair was already found)
@@ -102,10 +102,10 @@ public class ParserClass {
 
     /**
      * Same as {@link #getConcurrentPairs(String, int, String)} but with a filepath.
-     * @see FileUtiles#getFileContent(String)
+     * @see FileUtils#getFileContent(String)
      */
     public static Map<Pair<String,String>,Integer> getConcurrentPairsFromFile(String filepath, int n, String regex) throws IOException {
-        return getConcurrentPairs(FileUtiles.getFileContent(filepath),n,regex);
+        return getConcurrentPairs(FileUtils.getFileContent(filepath),n,regex);
     }
 
 
@@ -115,7 +115,7 @@ public class ParserClass {
      * @param map Result of the {@link #getConcurrentPairs(String, int, String)} method
      * @param k Number of pairs displayed
      */
-    private static String getBestConcurrentPairs(Map<Pair<String, String>, Integer> map, int k){
+    public static String getBestConcurrentPairs(Map<Pair<String, String>, Integer> map, int k){
         StringBuilder s = new StringBuilder("Best pairs :\n");
 
         SortingMap<Pair<String,String>,Integer> sorting = new SortingMap<>();
@@ -218,7 +218,7 @@ public class ParserClass {
      * Same as {@link #getOccurrencesSynonyms(String, String, int)} but from a file.
      */
     public static Map<String,Integer> getOccurrencesSynonymsFromFile(String filepath, String regex, int n) throws IOException {
-        return getOccurrencesSynonyms(FileUtiles.getFileContent(filepath),regex,n);
+        return getOccurrencesSynonyms(FileUtils.getFileContent(filepath),regex,n);
     }
 
 
@@ -253,7 +253,7 @@ public class ParserClass {
                      map.replace(words[i],map.get(words[i])+map.get(words[j]));
                      map.remove(words[j]);
                      words[j]=null;
-                     //System.out.println("After modif : "+map.get(words[i]));
+                     //System.out.println("After : "+map.get(words[i]));
                  }
              }
         }

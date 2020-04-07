@@ -26,7 +26,7 @@ public class FromHTML {
     }
 
     public static String stringFromHTML(String url,String cssQuery) throws IOException {
-        Elements el = queryFromHTML(url,"p,h1,h2,h3");
+        Elements el = queryFromHTML(url,cssQuery);
        return el.text();
     }
 

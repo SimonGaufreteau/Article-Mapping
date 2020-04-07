@@ -2,8 +2,8 @@ package parser_utils;
 
 import java.io.*;
 
-public class FileUtiles {
-	private FileUtiles(){}
+public class FileUtils {
+	private FileUtils(){}
 
 	public static String getFileContent(String filepath) throws IOException {
 		File file = new File(filepath);
