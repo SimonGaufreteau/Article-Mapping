@@ -1,16 +1,8 @@
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import parser_utils.FromHTML;
-import parser_utils.Pair;
 import parser_utils.ParserClass;
 
 import java.io.IOException;
-import java.lang.annotation.Documented;
 import java.util.*;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -45,13 +37,13 @@ public class Main {
         System.out.println("Number of occurencies with the synonym method : ");
         System.out.println(ParserClass.getNumberOfOccurences(occThes));
         System.out.println("For "+occThes.size()+" words in the map.");*/
-        String url = "https://en.wikipedia.org/wiki/Clare_Stevenson";
-        Document doc = Jsoup.connect(url).get();
-        Elements el = FromHTML.queryFromHTML(doc,"p,h1,h2,h3");
 
-        for(Element e:el){
-            System.out.println(e.text());
-        }
+        // Example with an article from an URL.
+        String url = "https://en.wikipedia.org/wiki/Clare_Stevenson";
+        String cssQuery = "p,h1,h2,h3";
+        String document= FromHTML.stringFromHTML(url,cssQuery);
+        Map<String, Integer> map = ParserClass.getOccurrences(document,n,regex);
+        System.out.println(ParserClass.getBestOccurrences(map,k));
     }
 }
 
