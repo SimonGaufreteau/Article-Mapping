@@ -14,6 +14,7 @@ import org.jgrapht.graph.DefaultListenableGraph;
 import parser_utils.FromHTML;
 import parser_utils.Pair;
 import parser_utils.ParserClass;
+import parser_utils.SortingMap;
 import test.JGraphXAdapterDemo;
 
 import javax.swing.*;
@@ -25,8 +26,9 @@ import java.util.Map;
 public class MainGraph extends JApplet {
 
 	private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
-	private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
+	private static final Dimension DEFAULT_SIZE = new Dimension(800, 800);
 
+	private static int MAP_DIVISOR = 7;
 
 	public static void main(String[] args)
 	{
@@ -80,41 +82,52 @@ public class MainGraph extends JApplet {
 		String regex = "[\\Q ,\n.:/-+()%$^'’\"&!?;\\E]";
 		int n=3;
 		String filePath = "Articles/insee-chomage.txt";
+		String filePath2 = "Articles/psg-dortmund.txt";
 		Map<String, Integer> map=null;
 		Map<Pair<String, String>, Integer> pairMap=null;
 		try {
-			map = ParserClass.getOccurrencesSynonymsFromFile(filePath, n, regex);
-			pairMap = ParserClass.getConcurrentPairsFromFile(filePath, n, regex);
+			map = ParserClass.getOccurrencesSynonymsFromFile(filePath2, n, regex);
+			pairMap = ParserClass.getConcurrentPairsFromFile(filePath2, n, regex);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+
 		//Adding the data for the words
 		assert map != null;
 		int i=0;
-		int k=map.size()/2;
-		for(String key : map.keySet()){
-			//System.out.println("Vertex added : "+key);
+		int k=map.size()/MAP_DIVISOR;
+		SortingMap <String,Integer>sorting = new SortingMap<>();
+		Map<String, Integer> sortedMap = sorting.sortByValue(map);
+
+		for(String key : sortedMap.keySet()){
 			g.addVertex(key);
 			i++;
 			if(i>k) break;
 		}
 
+
 		// adding the data for the bounds
 		assert pairMap != null;
-		for(Pair<String,String> key:pairMap.keySet()){
+		i=0;
+		k=pairMap.size()/MAP_DIVISOR;
+		SortingMap<Pair<String,String>,Integer> sortingPairs = new SortingMap<>();
+		Map<Pair<String, String>, Integer> sortedPairMap = sortingPairs.sortByValue(pairMap);
+		for(Pair<String,String> key:sortedPairMap.keySet()){
 			try{
-				DefaultEdge edge = g.addEdge(key.getKey(), key.getValue());
+				g.addEdge(key.getKey(), key.getValue());
 			}catch (Exception e){
 				//System.out.println("Could not find the words : "+key.getKey()+" / "+key.getValue());
 			}
+			i++;
+			if(i>k) break;
 		}
 
 
 
 
 
-		int basevalue=8;
+		int basevalue=5;
 		int widthValue=10;
 		//Changing the style of the edges
 		HashMap<mxICell, DefaultEdge> cellToEdgeMap = jgxAdapter.getCellToEdgeMap();
