@@ -14,6 +14,7 @@ public class ArgValidator {
 	private ArgValidator(){}
 
 	public static Pair<String,String> validateArgs(String[] args) throws Exception {
+		if(args.length==0) throw new Exception(ERROR_MESSAGE);
 		String option = args[0];
 		if (option.equals("--help") || option.equals("-h")) {
 			System.out.println(HELP_MESSAGE);
