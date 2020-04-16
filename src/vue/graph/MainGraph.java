@@ -15,7 +15,7 @@ import parser_utils.FromHTML;
 import parser_utils.Pair;
 import parser_utils.ParserClass;
 import parser_utils.SortingMap;
-import test.JGraphXAdapterDemo;
+import vue.help.ArgValidator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,10 +28,12 @@ public class MainGraph extends JApplet {
 	private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
 	private static final Dimension DEFAULT_SIZE = new Dimension(800, 800);
 
-	private static int MAP_DIVISOR = 7;
+	private static int MAP_DIVISOR = 5;
+	private static Pair<String,String> params;
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) throws Exception {
+		params= ArgValidator.validateArgs(args);
+		if(params==null) return;
 		MainGraph applet = new MainGraph();
 		applet.init();
 		JFrame frame = new JFrame();
@@ -41,7 +43,6 @@ public class MainGraph extends JApplet {
 		frame.pack();
 		frame.setVisible(true);
 	}
-
 
 	@Override
 	public void init() {
@@ -80,17 +81,33 @@ public class MainGraph extends JApplet {
 
 		// data sample
 		String regex = "[\\Q ,\n.:/-+()%$^'’\"&!?;\\E]";
+		String cssQuery = "p,h1,h2,h3";
 		int n=3;
 		String filePath = "Articles/insee-chomage.txt";
-		String filePath2 = "Articles/psg-dortmund.txt";
 		Map<String, Integer> map=null;
 		Map<Pair<String, String>, Integer> pairMap=null;
 		try {
-			map = ParserClass.getOccurrencesSynonymsFromFile(filePath2, n, regex);
-			pairMap = ParserClass.getConcurrentPairsFromFile(filePath2, n, regex);
-		} catch (IOException e) {
-			e.printStackTrace();
+			switch (params.getKey()){
+					case "url":
+						String docContent = FromHTML.stringFromHTML(params.getValue(),cssQuery);
+						map=ParserClass.getOccurrencesSynonyms(docContent,n,regex);
+						pairMap=ParserClass.getConcurrentPairs(docContent,n,regex);
+						break;
+					case "file":
+						map = ParserClass.getOccurrencesSynonymsFromFile(params.getValue(), n, regex);
+						pairMap = ParserClass.getConcurrentPairsFromFile(params.getValue(), n, regex);
+						break;
+					case "example":
+						System.out.println("Displaying the sample tests :");
+						map = ParserClass.getOccurrencesSynonymsFromFile(filePath, n, regex);
+						pairMap = ParserClass.getConcurrentPairsFromFile(filePath, n, regex);
+						break;
+				}
+			}
+		catch (IOException ex) {
+			ex.printStackTrace();
 		}
+
 
 
 		//Adding the data for the words
@@ -124,9 +141,6 @@ public class MainGraph extends JApplet {
 		}
 
 
-
-
-
 		int basevalue=5;
 		int widthValue=10;
 		//Changing the style of the edges
@@ -136,7 +150,6 @@ public class MainGraph extends JApplet {
 			Pair<String,String> pair =  getPairFromValue(defaultEdge.toString());
 			int u=pairMap.get(pair);
 			cell.setStyle(mxConstants.STYLE_OPACITY+"="+Math.min(u*basevalue+5,100)+";strokeWidth="+(1+(u*widthValue)/100));
-			//System.out.println("Pair :"+pair+", value : "+u);
 		}
 
 		//Changing the style of the cells to match their occurrences
@@ -147,13 +160,9 @@ public class MainGraph extends JApplet {
 				continue;
 			}
 			String value = cellToVertexMap.get(cell);
-			//System.out.println("Value : "+value+", Edges :"+cell.getEdgeCount());
-
 			int u=map.get(value)*basevalue;
 			cell.setGeometry(new mxGeometry(u,u,u,u));
 		}
-
-
 
 		// positioning via jgraphx layouts
 		mxFastOrganicLayout layout = new mxFastOrganicLayout(jgxAdapter);
