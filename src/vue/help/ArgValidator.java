@@ -2,12 +2,6 @@ package vue.help;
 
 import parser_utils.Pair;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * A class used to validate the inputs given while running this project.
  * This class and its methods are used in {@link vue.graph.MainGraph} and {@link vue.Main}

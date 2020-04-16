@@ -8,12 +8,20 @@ import vue.help.ArgValidator;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Exec class for the command-line type display. To see a more advanced-level display with graphs, check {@link vue.graph.MainGraph}. Uses the {@link ArgValidator} class.
+ * @author GAUFRETEAU Simon
+ */
 public class Main {
     private final static String regex = "[\\Q ,\n.:/-+()%$^'’\"&!?;\\E]";
     private static final int n=3;
     private static final int k=10;
     private static final String cssQuery = "p,h1,h2,h3";
 
+
+    /**
+     * Displays some samples. Sample files can be found in the "Articles" dir.
+     */
     public static void testsExamples() throws IOException {
         //Examples with a file :
         String filepath = "Articles/insee-chomage.txt";
@@ -43,6 +51,11 @@ public class Main {
     }
 
 
+    /**
+     * Displays the results of {@link ParserClass} for the given URL. Throws and Exception if the url isn't correct or impossible to access. Check {@link FromHTML} class for more details.
+     * @see ParserClass#getOccurrencesSynonyms(String, int, String)
+     * @see ParserClass#getConcurrentPairs(String, int, String)
+     */
     private static void urlResults(String url) throws IOException {
         // Example with an article from an URL.
         String document= FromHTML.stringFromHTML(url,cssQuery);
@@ -52,6 +65,12 @@ public class Main {
         System.out.println(ParserClass.getBestConcurrentPairs(pairMap,k));
     }
 
+    /**
+     * Displays the results of {@link ParserClass} for the given filepath. Absolute and relative file paths are accepted.
+     * @see ParserClass
+     * @see ParserClass#getOccurrencesFromFile(String, int, String)
+     * @see ParserClass#getConcurrentPairsFromFile(String, int, String)
+     */
     private static void fileResults(String filepath) throws IOException {
         Map<String,Integer> map = ParserClass.getOccurrencesFromFile(filepath,n,regex);
         System.out.println("--- With the synonyms disabled ---");

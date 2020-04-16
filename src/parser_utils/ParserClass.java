@@ -160,7 +160,6 @@ public class ParserClass {
                 }
                 map.put(key,arrayList);
             }
-            //catch (NumberFormatException ignored){}
             catch(Exception e) {
                 e.printStackTrace();
             }
@@ -199,7 +198,6 @@ public class ParserClass {
                             ArrayList<String> ar = thesaurus.get(key);
                             if(ar!=null && ar.contains(word)){
                                 map.put(key,map.get(key)+1);
-                                //System.out.println("Synonyms : \""+key+"\" and \""+word+"\"");
                                 isSynonym=true;
                                 break;
                             }
@@ -243,17 +241,12 @@ public class ParserClass {
              for(int j=i+1;j<l;j++){
                  if(words[j]==null) continue;
                  ArrayList<String> secondWordSynonyms = thesLists.get(j);
-                 /*System.out.println("i : "+i+" , j : "+j);
-                 System.out.println("Words[i] :"+words[i]+". Count : "+map.get(words[i]));
-                 System.out.println("Words[j] :"+words[j]+". Count : "+map.get(words[j]));*/
                  //If any of the two Arrays of synonyms match with one of the words, add the occurrences to the first in the map.
                  if( (firstWordSynonyms!=null && firstWordSynonyms.contains(words[j])) ||
                          (secondWordSynonyms!=null && secondWordSynonyms.contains(words[i]))){
-
                      map.replace(words[i],map.get(words[i])+map.get(words[j]));
                      map.remove(words[j]);
                      words[j]=null;
-                     //System.out.println("After : "+map.get(words[i]));
                  }
              }
         }

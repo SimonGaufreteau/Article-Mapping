@@ -1,5 +1,10 @@
 package parser_utils;
 
+/**
+ * A simple Pair class with a Key and a Value.
+ * @param <K> Type of the Key.
+ * @param <V> Type of the Value.
+ */
 public class Pair<K,V> {
     private final K key;
     private final V value;

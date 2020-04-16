@@ -11,8 +11,6 @@ import java.io.IOException;
  * @author GAUFRETEAU Simon
  */
 public class FromHTML {
-
-
     public static Elements queryFromHTML(String url,String cssQuery) throws IOException {
         System.out.println("Waiting to connect to the url... ("+url+")");
         long time = System.currentTimeMillis();

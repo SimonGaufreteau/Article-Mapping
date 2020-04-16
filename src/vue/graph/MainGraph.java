@@ -23,6 +23,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Applet allowing to display the result of the {@link ParserClass} in a graph. Using the {@link ArgValidator} class.
+ * @author GAUFRETEAU Simon
+ */
 public class MainGraph extends JApplet {
 
 	private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
@@ -38,7 +42,7 @@ public class MainGraph extends JApplet {
 		applet.init();
 		JFrame frame = new JFrame();
 		frame.getContentPane().add(applet);
-		frame.setTitle("Affichage des couples");
+		frame.setTitle("Couples display");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
@@ -113,7 +117,7 @@ public class MainGraph extends JApplet {
 		//Adding the data for the words
 		assert map != null;
 		int i=0;
-		int k=map.size()/MAP_DIVISOR;
+		int k=Math.min(map.size()/MAP_DIVISOR,100);
 		SortingMap <String,Integer>sorting = new SortingMap<>();
 		Map<String, Integer> sortedMap = sorting.sortByValue(map);
 
@@ -171,9 +175,11 @@ public class MainGraph extends JApplet {
 		layout.execute(jgxAdapter.getDefaultParent());
 	}
 
-
+	/**
+	 * A simple method used to get the values of a Pair represented as : (word1 : word2)
+	 * @param value A String representing the Pair. Example : (hello : world)
+	 */
 	private Pair<String,String> getPairFromValue(String value){
-		//Must be of the form : (word1 : word2)
 		String result = value.replaceAll("[()]","");
 		String[] prePair = result.split(" : ");
 		if(prePair.length!=2) throw new IllegalArgumentException();
