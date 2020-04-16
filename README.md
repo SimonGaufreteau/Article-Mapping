@@ -39,6 +39,8 @@ This is a personnal project but if you wish to contribute, please try to respect
 
 To resume : clean and documented code, not overflowed by comments but still comprehensible.
 
+I accept anything enhancing the project. Issues and PR will be checked ASAP (1 day ~)
+
 ## Credits
 
 Almost everything written in this projects is from my own hand exept for the SortingMap class.
